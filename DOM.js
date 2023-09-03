@@ -12,6 +12,7 @@ const comments = [{
   isActiveLike: false,
 },
 {
+  
   name: 'Варвара Н.',
   text: 'Мне нравится как оформлена эта страница! ❤',
   date: '13.02.22 19:22',
