@@ -26,7 +26,7 @@ const initLikeButtons = () => {
       const likeButtonActive = comments[likeButton.dataset.index];
       likeButtonActive.isActiveLike ? --likeButtonActive.likesCounter : ++likeButtonActive.likesCounter; //??? каким-то образом работает
       likeButtonActive.isActiveLike = !likeButtonActive.isActiveLike; //??? каким-то образом работает
-    
+
       renderComments();
     });
   };
@@ -65,21 +65,21 @@ const renderComments = () => {
   </li>`;
   }).join('');
   listElement.innerHTML = commentsHtml;
-  
+
   initLikeButtons();
 };
 
 renderComments();
 
 const createNewComment = () => {
-let currentDate = new Date();
-comments.push({
-  name: nameInputElement.value,
-  text: commentInputElement.value,
-  date: now(currentDate),
-  likesCounter: 0,
-  isActiveLike: false,
-});
+  let currentDate = new Date();
+  comments.push({
+    name: nameInputElement.value,
+    text: commentInputElement.value,
+    date: now(currentDate),
+    likesCounter: 0,
+    isActiveLike: false,
+  });
 };
 
 renderComments();
