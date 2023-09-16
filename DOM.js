@@ -184,6 +184,4 @@ buttonElement.addEventListener("click", () => {
 
 renderComments();
 
-
-
 console.log("It works!");
