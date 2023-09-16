@@ -3,6 +3,8 @@ const buttonElement = document.getElementById("add-form-button");
 const listElement = document.getElementById("list");
 const nameInputElement = document.getElementById("name-input");
 const commentInputElement = document.getElementById("comment-input");
+const inputText = document.querySelectorAll(".add-form-text");
+let quoteGlobal = ""; //для чего?? но если убрать, то перестают работать лайки
 
 const comments = [{
   name: 'Глеб Фокин',
@@ -12,7 +14,7 @@ const comments = [{
   isActiveLike: false,
 },
 {
-  
+
   name: 'Варвара Н.',
   text: 'Мне нравится как оформлена эта страница! ❤',
   date: '13.02.22 19:22',
@@ -23,7 +25,8 @@ const comments = [{
 const initLikeButtons = () => {
   const likeButtons = document.querySelectorAll('.like-button');
   for (const likeButton of likeButtons) {
-    likeButton.addEventListener('click', () => {
+    likeButton.addEventListener('click', (event) => {
+      event.stopPropagation();
       const likeButtonActive = comments[likeButton.dataset.index];
       likeButtonActive.isActiveLike ? --likeButtonActive.likesCounter : ++likeButtonActive.likesCounter; //??? каким-то образом работает
       likeButtonActive.isActiveLike = !likeButtonActive.isActiveLike; //??? каким-то образом работает
@@ -31,7 +34,19 @@ const initLikeButtons = () => {
       renderComments();
     });
   };
-}
+
+  const quotElements = document.querySelectorAll(".comment");
+  for (const quotElement of quotElements) {
+    quotElement.addEventListener("click", () => {
+      const index = quotElement.dataset.index;
+      const comment = comments[index];
+
+      quoteGlobal = `${comment.name}:\n${comment.text}`;
+      inputText.value = `"${quoteGlobal}"\n`;
+      document.querySelector(".add-form-text").focus();
+    });
+  };
+};
 
 const plusZero = (str) => {
   return str < 10 ? `0${str}` : str;
@@ -47,13 +62,14 @@ const now = (currentDate) => {
 
 const renderComments = () => {
   const commentsHtml = comments.map((comment, index) => {
-    return `<li class="comment">
-    <div class="comment-header">
+    return `
+    <li class="comment data-index='${index}'">
+    <div class="comment-header data-index='${index}'">
       <div>${comment.name}</div>
       <div>${comment.date}</div>
     </div>
     <div class="comment-body">
-      <div class="comment-text">
+      <div class="comment-text" data-index='${index}'>
       ${comment.text}
       </div>
     </div>
@@ -63,9 +79,14 @@ const renderComments = () => {
         <button data-index='${index}' class="${comment.isActiveLike ? 'like-button -active-like' : 'like-button'}"></button>
       </div>
     </div>
-  </li>`;
+    </li>`;
   }).join('');
   listElement.innerHTML = commentsHtml;
+
+  quoteGlobal = "";
+  inputText.value = "";
+  nameInputElement.value = "";
+
 
   initLikeButtons();
 };
@@ -75,8 +96,17 @@ renderComments();
 const createNewComment = () => {
   let currentDate = new Date();
   comments.push({
-    name: nameInputElement.value,
-    text: commentInputElement.value,
+    name: nameInputElement.value
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;"),
+    text: commentInputElement.value
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;"),
+    quote: quoteGlobal,
     date: now(currentDate),
     likesCounter: 0,
     isActiveLike: false,
@@ -153,5 +183,7 @@ buttonElement.addEventListener("click", () => {
 });
 
 renderComments();
+
+
 
 console.log("It works!");
