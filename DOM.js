@@ -35,14 +35,12 @@ const initLikeButtons = () => {
     });
   };
 
-  const quotElements = document.querySelectorAll(".comment");
+  const quotElements = document.querySelectorAll(".comment-text");
   for (const quotElement of quotElements) {
     quotElement.addEventListener("click", () => {
-      const index = quotElement.dataset.index;
-      const comment = comments[index];
-
-      quoteGlobal = `${comment.name}:\n${comment.text}`;
-      inputText.value = `"${quoteGlobal}"\n`;
+      const comment = comments[quotElement.dataset.index];
+      const quoteGlobal = `${comment.name}:\n ${comment.text}`;
+      commentInputElement.value = `"${quoteGlobal}"\n`;
       document.querySelector(".add-form-text").focus();
     });
   };
@@ -84,7 +82,7 @@ const renderComments = () => {
   listElement.innerHTML = commentsHtml;
 
   quoteGlobal = "";
-  inputText.value = "";
+  commentInputElement.value = "";
   nameInputElement.value = "";
 
 
@@ -183,7 +181,5 @@ buttonElement.addEventListener("click", () => {
 });
 
 renderComments();
-
-
 
 console.log("It works!");
